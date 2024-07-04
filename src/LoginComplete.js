@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 
 function LoginComplete(props) {
 
-    const isLogin = useSelector((state) => )
+    const isLogin = useSelector((state) => state.isLogin)
     
     return (
         <div>

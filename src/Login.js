@@ -1,5 +1,4 @@
-import { type } from "@testing-library/user-event/dist/type";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "./store";
@@ -8,24 +7,75 @@ function Login(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
 
-  function loginProcess() {
+  function loginProcess(e) {
+    e.preventDefault(); // submit 하지마!!
+
     // 1. form 태그 username, password 가져오기
+    let username = user.username;
+    let password = user.password;
 
     // 2. 유효성 검증
+    console.log(username);
+    console.log(password);
 
     // 3. 통신
 
+    let requestBody = JSON.stringify(user);
+    console.log(requestBody);
+    // fetch 생략 (Content-Type: application/json; charset=utf-8)
+
     // 4. store 상태변경
+    localStorage.setItem("jwt", "fdsadsafdsafdsafsda"); //디스크 저장
     dispatch(login());
 
     // 5. 화면 이동
     navigate("/loginComplete");
   }
 
+  function move() {
+    navigate("/loginComplete");
+  }
+
+  function changeValue(e) {
+    //console.log("event", e);
+    //console.log("value", e.target.value);
+    //console.log("name", e.target.name);
+
+    // computed property name => 변수를 키값으로 바인딩할 수 있따.
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+
+    //console.log("username", user.username);
+    //console.log("password", user.password);
+  } // 상태 변경을 하면 메서드가 종료되어야 반영된다.
+
   return (
     <div>
-      <button onClick={loginProcess}>로그인</button>
+      <form>
+        <input
+          type="text"
+          placeholder="username"
+          onChange={changeValue}
+          name="username"
+        />
+        <input
+          type="password"
+          placeholder="password"
+          onChange={changeValue}
+          name="password"
+        />
+        <button type="submit" onClick={loginProcess}>
+          로그인
+        </button>
+      </form>
+      <button onClick={move}>로그인안하고 넘어가기</button>
     </div>
   );
 }
